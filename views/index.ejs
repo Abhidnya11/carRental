@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Geolocation</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="script" href="/script.js">
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div style="margin:20px;">
+        <button id="travel" class="btn btn-info btn-danger btn-lg" onclick="travel()">Emergency</button>
+    </div>
+
+    </div>
+    </div>
+
+
+
+    <div id="map" style="width:100%; height: 100vh"></div>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+
+    <script>
+
+        var map = L.map('map').setView([49.3692442,8.5858208], 25);
+        mapLink = "<a href='http://openstreetmap.org'>OpenStreetMap</a>";
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'Leaflet &copy; ' + mapLink + ', contribution', maxZoom: 18 }).addTo(map);
+
+        var cab1 = L.icon({
+            iconUrl: '../img/cab1.png',
+            iconSize: [70, 70]
+        })
+
+        var cab2 = L.icon({
+            iconUrl: '../img/cab2.png',
+            iconSize: [70, 70]
+        })
+
+        var cab3 = L.icon({
+            iconUrl: '../img/cab3.png',
+            iconSize: [70, 70]
+        })
+
+        var fireFighterIcon = L.icon({
+            iconUrl: 'img/fireFighter.png',
+            iconSize: [40, 40]
+        })
+
+        var emergencyIcon = L.icon({
+            iconUrl: 'img/emergency.png',
+            iconSize: [100, 100]
+        })
+
+        // All markers
+
+        var marker = L.marker([49.3961233, 8.6492993], { icon: cab1 }).addTo(map);
+        var marker2 = L.marker([49.356904, 8.550374], { icon: cab2 }).addTo(map);
+        var marker3 = L.marker([49.3692442,8.5858208], { icon: cab3 }).addTo(map);
+        var marker4 = L.marker([49.3775151, 8.5908414], { icon: fireFighterIcon }).addTo(map);
+        var marker5 = L.marker([49.4149879,8.5430918], { icon: emergencyIcon }).addTo(map);
+        var marker6 = L.marker([49.3946825,8.5728362], { icon: fireFighterIcon }).addTo(map);
+        var marker7 = L.marker([49.3721315,8.6308641], { icon: fireFighterIcon }).addTo(map);
+        var marker8 = L.marker([49.352222, 8.570278], { icon: fireFighterIcon }).addTo(map);
+
+        function travel(e) {
+            console.log(e)
+           
+            L.Routing.control({
+                waypoints: [
+
+                // emergency
+                    L.latLng(49.3692442,8.5858208),
+                // fireFighter1
+                    L.latLng(49.3775151, 8.5908414),
+                // fireFighter1
+                    L.latLng(49.3946825,8.5728362),
+                // Cab1
+                    L.latLng(49.4149879,8.5430918),
+                ]
+            }).on('routesfound', function (e) {
+                var routes = e.routes;
+                console.log(routes);
+
+                e.routes[0].coordinates.forEach(function (coord, index) {
+                    setTimeout(function () {
+                        marker3.setLatLng([coord.lat, coord.lng]);
+                    }, 100 * index)
+                })
+
+            }).addTo(map);
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
+
